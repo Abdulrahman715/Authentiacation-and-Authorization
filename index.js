@@ -18,8 +18,10 @@ mongoose.connect(url).then(() => {
 })
 
 const userRouter = require('./router/user.router');
+const categoryRouter = require('./router/categories.router');
 
 app.use("/api/users", userRouter);
+app.use("/api/categories", categoryRouter);
 
 
 app.all("*", (req, res, next) => {

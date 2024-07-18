@@ -34,6 +34,11 @@ const getSingleUser = asyncWrapper(async (req, res, next) => {
 });
 
 const updateUser = asyncWrapper(async (req, res, next) => {
+
+    if (req.body.password || req.body.confirmPassword) {
+        const error = appError.create("this route not specified to update password , please use /changeMyPassword", 400, httpStatusText.FAIL);
+        return next(error);
+    }
     
     const userId = req.params.userId;
 
@@ -62,9 +67,21 @@ const deleteUser = asyncWrapper(async (req, res, next) => {
     });
 });
 
+const signOut = asyncWrapper(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.params.userId, { active: false });
+
+    res.status(204).json({
+        status: httpStatusText.SUCCESS,
+        data: null,
+        message: "user Deleted successfully",
+    });
+    
+});
+
 module.exports = {
     getAllUsers,
     getSingleUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    signOut
 }
