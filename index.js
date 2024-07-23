@@ -4,12 +4,15 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const port = process.env.PORT;
+const compression = require('compression');
 
 const httpStatusText = require('./utils/httpStatusText');
 
 const app = express();
 
 app.use(express.json());
+
+app.use(compression());
 
 const url = process.env.MONGO_URL;
 
@@ -22,6 +25,7 @@ const categoryRouter = require('./router/categories.router');
 
 app.use("/api/users", userRouter);
 app.use("/api/categories", categoryRouter);
+
 
 
 app.all("*", (req, res, next) => {
